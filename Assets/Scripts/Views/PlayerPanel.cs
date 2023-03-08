@@ -11,13 +11,15 @@ namespace Views
     {
         private TextMeshProUGUI _uiName;
         private RawImage _uiStatus;
-        private SpriteRenderer _uiRingColor;
+        //private SpriteRenderer _uiRingColor;
+        private Image _uiRingColor;
 
         private void Awake()
         {
             _uiName = transform.Find("Text").GetComponent<TextMeshProUGUI>();
             _uiStatus = transform.Find("Status").GetComponent<RawImage>();
-            _uiRingColor = transform.Find("Image").GetComponent<SpriteRenderer>();
+            //_uiRingColor = transform.Find("Image").GetComponent<SpriteRenderer>();
+            _uiRingColor = transform.Find("Image").GetComponent<Image>();
         }
 
         [PunRPC]

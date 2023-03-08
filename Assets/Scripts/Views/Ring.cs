@@ -108,9 +108,10 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
         DeClone();
     }
 
-    public void SetColor(Color color)
+    [PunRPC]
+    public void SetColor(PlayerType playerType)
     {
-        GetComponent<Image>().color = color;
+        GetComponent<Image>().color = playerType == PlayerType.MasterPlayer ? Constants.Colors.MasterColor : Constants.Colors.ClientColor;
     }
 
     public void SetTransparency(float transparency)
