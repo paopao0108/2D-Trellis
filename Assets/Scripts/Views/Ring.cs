@@ -65,6 +65,9 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
             eventData.pressEventCamera, out _newMousePos);
         _rtClone.position =
             _rt.position + new Vector3(_newMousePos.x - _startMousePos.x, _newMousePos.y - _startMousePos.y, 0);
+        Debug.Log("鼠标位置：" + _newMousePos);
+        //Locate();
+
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -87,7 +90,6 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
             _rtClone.position.y - _zeroPoint.position.y, 0);
         curRow = Mathf.RoundToInt(posInPanel.x / Cell.CellSize);
         curCol = Mathf.RoundToInt(posInPanel.y / Cell.CellSize);
-        Debug.LogError("cur: " + curRow + ", " + curCol);
     }
 
     private void HandleDragResult()

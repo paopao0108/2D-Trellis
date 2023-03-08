@@ -22,7 +22,7 @@ public class GridPanel : MonoBehaviourPun
         var gridSpacing = GetComponent<GridLayoutGroup>().spacing.x;
         float gridPanelPadding = GetComponent<GridLayoutGroup>().padding.left;
         Cell.CellSize = (gridPanelSize - (row - 1) * gridSpacing - 2 * gridPanelPadding) / row;
-        Debug.Log("?????: " + gridPanelSize + "??????: " + gridSpacing + "???????:  " + Cell.CellSize);
+        Debug.Log("gridPanelSize: " + gridPanelSize + "gridSpacing: " + gridSpacing + "Cell.CellSize:  " + Cell.CellSize);
         GetComponent<GridLayoutGroup>().cellSize = new Vector2(Cell.CellSize, Cell.CellSize);
         Init();
     }
