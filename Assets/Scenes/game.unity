@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 15816128}
   - component: {fileID: 15816129}
+  - component: {fileID: 15816130}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -168,6 +169,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 1566877534556999808, guid: 3672cbafbb7a010449c06d7f53d46383, type: 3}
+--- !u!114 &15816130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 15816127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 8
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1001 &135645181
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1839,8 +1862,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b5b8f37ae55def4abb85874f8f8127f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 2344070857108896030, guid: 3672cbafbb7a010449c06d7f53d46383, type: 3}
   cell: {fileID: -1425738887457795025, guid: 06a5b28d1432efe419fd1ec774471a1d, type: 3}
   LRingPrefab: {fileID: 7917737096599836576, guid: 51a78d0434afc9045adb97fc54df14e8, type: 3}
+  MRingPrefab: {fileID: 4302251925746097821, guid: 50b02473819f4074c8e6dd189c9badd7, type: 3}
+  SRingPrefab: {fileID: 54636268054777462, guid: c308a9975cc38a94bbc4123b4b14bdd9, type: 3}
 --- !u!114 &1906883133
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2071,6 +2097,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RingPrefab: {fileID: 54636268054777462, guid: c308a9975cc38a94bbc4123b4b14bdd9, type: 3}
   RingType: 2
+  player: {fileID: 2344070857108896030, guid: 3672cbafbb7a010449c06d7f53d46383, type: 3}
 --- !u!222 &54636267919602687
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2397,6 +2424,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RingPrefab: {fileID: 4302251925746097821, guid: 50b02473819f4074c8e6dd189c9badd7, type: 3}
   RingType: 1
+  player: {fileID: 2344070857108896030, guid: 3672cbafbb7a010449c06d7f53d46383, type: 3}
 --- !u!222 &4302251926875115290
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2509,6 +2537,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RingPrefab: {fileID: 7917737096599836576, guid: 51a78d0434afc9045adb97fc54df14e8, type: 3}
   RingType: 0
+  player: {fileID: 2344070857108896030, guid: 3672cbafbb7a010449c06d7f53d46383, type: 3}
 --- !u!1 &7917737094743869982
 GameObject:
   m_ObjectHideFlags: 0

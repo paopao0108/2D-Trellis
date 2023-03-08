@@ -10,12 +10,30 @@ namespace Controller
         public PlayerType PlayerType =>
             PhotonNetwork.IsMasterClient ? PlayerType.MasterPlayer : PlayerType.ClientPlayer;
 
-        private bool turn; // 控制玩家轮流操作
+        public Ring[] rings;
+
+        private void Start()
+        {
+            //rings = GameObject.Find("RingPanel").gameObject.GetComponentsInChildren<Ring>();
+            
+        }
 
         private void Update()
         {
             if (!photonView.IsMine) return;
+
+            //Debug.Log("设置的当前玩家： " + NetworkManager.playerTurn);
+            //Debug.Log("获取当前玩家： " + this.PlayerType);
+            //if (NetworkManager.playerTurn != this.PlayerType)
+            //{
+            //    RingPanel.DisableRing(RingPanel.Large);
+            //}
+            //else
+            //{
+            //    RingPanel.EnableRing(RingPanel.Large);
+            //}
         }
+
 
         public override void OnJoinedRoom()
         {

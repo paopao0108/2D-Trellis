@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
+using Unity.VisualScripting;
 using UnityEngine;
 using Utils;
 
@@ -33,11 +34,15 @@ public class RingPanel : MonoBehaviour
         nums[(int)ringType]--;
     }
 
-    //[PunRPC]
-    //public void InitRingColor(PlayerType playerType)
-    //{
-    //    Large.SetColor(playerType);
-    //    Middle.SetColor(playerType);
-    //    Small.SetColor(playerType);
-    //}
+    // 启用Ring脚本
+    public static void EnableRing(Ring ring)
+    {
+        if (ring.GetComponent<Ring>() == null) ring.AddComponent<Ring>();
+    }
+
+    // 禁用Ring脚本
+    public static void DisableRing(Ring ring)
+    {
+        if (ring.GetComponent<Ring>()) Destroy(ring.GetComponent<Ring>());
+    }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Controller;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -21,6 +22,7 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
     public Ring RingPrefab;
     public RingType RingType;
     [NonSerialized] public int curRow, curCol;
+    public Player player;
 
     private void Awake()
     {
@@ -44,8 +46,14 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
         _rtClone = null;
     }
 
+
     public void OnBeginDrag(PointerEventData eventData)
     {
+        Debug.Log("====================================");
+        Debug.Log("实际轮到：" + NetworkManager.playerTurn);
+        //Debug.Log("获得次序：" + player.PlayerType);
+        Debug.Log("====================================");
+
         _isOnUI = RectTransformUtility.RectangleContainsScreenPoint(_rt, Input.mousePosition);
         if (!_isOnUI || _disabled) return;
 
@@ -65,7 +73,6 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
             eventData.pressEventCamera, out _newMousePos);
         _rtClone.position =
             _rt.position + new Vector3(_newMousePos.x - _startMousePos.x, _newMousePos.y - _startMousePos.y, 0);
-        Debug.Log("鼠标位置：" + _newMousePos);
         //Locate();
 
     }
@@ -112,11 +119,13 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
     public void SetColor(PlayerType playerType)
     {
         GetComponent<Image>().color = playerType == PlayerType.MasterPlayer ? Constants.Colors.MasterColor : Constants.Colors.ClientColor;
+        //Debug.Log("SetColor : " + GetComponent<Image>().color);
     }
 
     public void SetTransparency(float transparency)
     {
         var color = GetComponent<Image>().color;
+        //Debug.Log("color" + color);
         color.a = transparency;
         GetComponent<Image>().color = color;
     }
