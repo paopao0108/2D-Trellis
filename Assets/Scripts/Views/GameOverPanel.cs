@@ -44,4 +44,19 @@ public class GameOverPanel : MonoBehaviour
         transform.Find("WinPanel").gameObject.SetActive(true);
         transform.Find("LosePanel").gameObject.SetActive(false);
     }
+
+    public void OnExitButton()
+    {
+        Debug.Log("退出游戏！");
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+    Application.Quit();
+#endif
+    }
+
+    public void OnAgainButton()
+    {
+        Debug.Log("再来一次");
+    }
 }

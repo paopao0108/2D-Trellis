@@ -25,6 +25,15 @@ namespace Controller
             InitRingPanel(PlayerType);
         }
 
+        /// <summary>
+        /// /退出程序，则退出房间
+        /// </summary>
+        /// <returns></returns>
+        public void OnApplicationQuit()
+        {
+            PhotonNetwork.LeaveRoom();
+        }
+
         public void InitInfoPanel()
         {
             if (PlayerType == PlayerType.MasterPlayer)
