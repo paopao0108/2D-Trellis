@@ -8,11 +8,12 @@ namespace Controller
 {
     public class NetworkManager : MonoBehaviourPunCallbacks
     {
+        private static NetworkManager _instance;
+        private RoomOptions roomOptions;
+
+        public static NetworkManager Instance => _instance;
         public GameObject playerPrefab;
         public static PlayerType playerTurn = PlayerType.MasterPlayer;
-        private static NetworkManager _instance;
-        
-        public static NetworkManager Instance => _instance;
         
         private void Awake()
         {
@@ -21,14 +22,14 @@ namespace Controller
 
         private void Start()
         {   
-            PhotonNetwork.ConnectUsingSettings();
+            PhotonNetwork.ConnectUsingSettings(); // 连接到大厅
         }
 
         public override void OnConnectedToMaster()
         {
             base.OnConnectedToMaster();
 
-            var roomOptions = new RoomOptions();
+            roomOptions = new RoomOptions();
             roomOptions.MaxPlayers = 2;
 
             if (PhotonNetwork.JoinOrCreateRoom("room01", roomOptions, TypedLobby.Default))
@@ -53,6 +54,13 @@ namespace Controller
         {
             if (PhotonNetwork.IsMasterClient) return playerTurn == PlayerType.MasterPlayer;
             else return playerTurn == PlayerType.ClientPlayer;
+        }
+
+        public static bool IsReady()
+        {
+            bool isReady = false;
+            //roomOptions
+            return isReady;
         }
     }
 }

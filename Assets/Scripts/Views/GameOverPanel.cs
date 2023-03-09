@@ -9,12 +9,14 @@ public class GameOverPanel : MonoBehaviour
 {
     private PlayerType curClient; // 当前客户端
 
+    public AudioSource winSound;
+    public AudioSource loseSound;
+
     void Start()
     {
 
     }
 
-    // Update is called once per frame
     void Update()
     {
 
@@ -23,14 +25,21 @@ public class GameOverPanel : MonoBehaviour
     public void GameOver(PlayerType winner)
     {
         Debug.Log("接收到Canvas的消息");
-        //winner == PlayerType.ClientPlayer ? ShowWin() : ShowLose();
         // 1. 先获取当前的客户端
         curClient = PhotonNetwork.IsMasterClient ? PlayerType.MasterPlayer : PlayerType.ClientPlayer;
 
         // 2. 判断当前客户端与winner相同
-        if (winner == curClient) ShowWin();
-        else ShowLose();
-        
+        if (winner == curClient) 
+        {
+            ShowWin();
+            GameController.Instance.PlaySound(winSound); // 播放成功音效
+        }
+        else
+        {
+            ShowLose();
+            GameController.Instance.PlaySound(loseSound); // 播放失败音效
+        }
+
     }
 
     public void ShowLose()
@@ -57,6 +66,6 @@ public class GameOverPanel : MonoBehaviour
 
     public void OnAgainButton()
     {
-        Debug.Log("再来一次");
+        Debug.Log("再来一次"); // 玩家重新进入房间，游戏重新开始
     }
 }

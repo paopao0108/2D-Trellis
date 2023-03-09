@@ -21,6 +21,7 @@ namespace Controller
 
             var player = PhotonNetwork.Instantiate(gameObject.name, Vector3.zero, gameObject.transform.rotation);
             Debug.Log("Enter Room");
+
             InitInfoPanel();
             InitRingPanel(PlayerType);
         }

@@ -14,6 +14,9 @@ public class RingPanel : MonoBehaviour
     [NonSerialized] public static Ring LRing;
     [NonSerialized] public static Ring MRing;
     [NonSerialized] public static Ring SRing;
+    //[NonSerialized] public static Ring LRing;
+    //[NonSerialized] public static Ring MRing;
+    //[NonSerialized] public static Ring SRing;
 
     private void Awake()
     {

@@ -31,7 +31,7 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
         _zeroPoint = GameObject.Find("zeroPoint").transform;
         _gridPanel = GameObject.Find("GamePanel/GridPanel").GetComponent<GridPanel>();
         _gameController = GameObject.Find("Canvas").GetComponent< GameController> ();
-        Debug.Log("canvas:" + _gameController);
+        //Debug.Log("canvas:" + _gameController);
     }
 
     public void Clone()
@@ -102,6 +102,10 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
             if (GridPanel.grids[curCol][curRow].Pos[_rt.tag] == "")
             {
                 _gridPanel.photonView.RPC("SetPosition", RpcTarget.AllBuffered, RingType, curRow, curCol);
+
+                // 音效播放
+                _gameController.PlaySound(_gameController.dropSound);
+
                 _disabled = --_num <= 0; // 是否没有数目（放置一个ring之后，数目减少）
                 if (_disabled) SetTransparency(Constants.Vars.transparency); // 若没有数量，则禁用（通过设置透明度来达到视觉效果）
                 
@@ -125,6 +129,7 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
                 //_gameController.photonView.RPC("SendGameOver", RpcTarget.AllBuffered, PlayerType.MasterPlayer);
 
                 NetworkManager.Instance.photonView.RPC("ChangeTurn", RpcTarget.AllBuffered);
+                
             }
         }
         DeClone();
