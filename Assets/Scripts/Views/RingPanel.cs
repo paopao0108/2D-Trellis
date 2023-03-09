@@ -41,5 +41,4 @@ public class RingPanel : MonoBehaviour
         MRing.SetColor(playerType);
         SRing.SetColor(playerType);
     }
-
 }

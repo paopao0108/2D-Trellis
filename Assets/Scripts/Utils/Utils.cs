@@ -47,6 +47,7 @@ namespace Utils
                 leftUpList.Count + rightDownList.Count + 1 == count ||
                 leftDownList.Count + rightUpList.Count + 1 == count)
                 return true;
+
             return res;
         }
 
@@ -64,113 +65,54 @@ namespace Utils
             switch (direc)
             {
                 case Direction.UP:
-                    
-                    GetSameRingCell(count, curRow - 1, curCol, curRow, curCol, sizeType, grids, res);
-                    // if (grids[curCol][curRow - 1] && grids[curCol][curRow - 1].Pos[sizeType] != "" && (grids[curCol][curRow - 1].Pos[sizeType] == grids[curCol][curRow].Pos[sizeType]))
-                    // {
-                    //     res.Add(grids[curCol][curRow - 1]);
-                    //     var resList = GetSameRingCellByDirection(count, curRow - 1, curCol, sizeType, grids, Direction.UP);
-                    //     res.AddRange(resList);
-                    // }
+                    Debug.Log("UP方向");
+                    GetSameRingCell(count, curRow, curCol + 1, curRow, curCol, sizeType, grids, direc, res);
                     break;
                 case Direction.DOWN:
-                    GetSameRingCell(count, curRow + 1, curCol, curRow, curCol, sizeType, grids, res);
-
-                    // if (grids[curCol][curRow + 1] && grids[curCol][curRow + 1].Pos[sizeType] != "" && (grids[curCol][curRow + 1].Pos[sizeType] == grids[curCol][curRow].Pos[sizeType]))
-                    // {
-                    //     res.Add(grids[curCol][curRow + 1]);
-                    //     var resList = GetSameRingCellByDirection(count, curRow + 1, curCol, sizeType, grids, Direction.DOWN);
-                    //     res.AddRange(resList);
-                    // }
+                    Debug.Log("DOWN方向");
+                    GetSameRingCell(count, curRow, curCol - 1, curRow, curCol, sizeType, grids, direc, res);
                     break;
                 case Direction.LEFT:
-                    GetSameRingCell(count, curRow, curCol - 1, curRow, curCol, sizeType, grids, res);
-
-                    // if (grids[curCol - 1][curRow] && grids[curCol - 1][curRow].Pos[sizeType] != "" && (grids[curCol - 1][curRow].Pos[sizeType] == grids[curCol][curRow].Pos[sizeType]))
-                    // {
-                    //     res.Add(grids[curCol - 1][curRow]);
-                    //     var resList = GetSameRingCellByDirection(count, curRow, curCol - 1, sizeType, grids, Direction.UP);
-                    //     res.AddRange(resList);
-                    // }
+                    Debug.Log("Left方向");
+                    GetSameRingCell(count, curRow - 1, curCol, curRow, curCol, sizeType, grids, direc, res);
                     break;
                 case Direction.RIGHT:
-                    GetSameRingCell(count, curRow, curCol + 1, curRow, curCol, sizeType, grids, res);
-
-                    // if (grids[curCol + 1][curRow] && grids[curCol + 1][curRow].Pos[sizeType] != "" && (grids[curCol + 1][curRow].Pos[sizeType] == grids[curCol][curRow].Pos[sizeType]))
-                    // {
-                    //     res.Add(grids[curCol + 1][curRow]);
-                    //     var resList = GetSameRingCellByDirection(count, curRow, curCol + 1, sizeType, grids, Direction.UP);
-                    //     res.AddRange(resList);
-                    // }
+                    Debug.Log("RIGHT方向");
+                    GetSameRingCell(count, curRow + 1, curCol, curRow, curCol, sizeType, grids, direc, res);
                     break;
                 case Direction.LEFTUP:
-                    GetSameRingCell(count, curRow -1, curCol - 1, curRow, curCol, sizeType, grids, res);
-
-                    // if (grids[curCol - 1][curRow - 1] && grids[curCol - 1][curRow - 1].Pos[sizeType] != "" && (grids[curCol - 1][curRow - 1].Pos[sizeType] == grids[curCol][curRow].Pos[sizeType]))
-                    // {
-                    //     res.Add(grids[curCol - 1][curRow - 1]);
-                    //     var resList = GetSameRingCellByDirection(count, curRow - 1, curCol - 1, sizeType, grids, Direction.UP);
-                    //     res.AddRange(resList);
-                    // }
+                    Debug.Log("LEFTUP方向");
+                    GetSameRingCell(count, curRow - 1, curCol + 1, curRow, curCol, sizeType, grids, direc, res);
                     break;
                 case Direction.LEFTDOWN:
-                    GetSameRingCell(count, curRow + 1, curCol - 1, curRow, curCol, sizeType, grids, res);
-
-                    // if (grids[curCol + 1][curRow - 1] && grids[curCol + 1][curRow - 1].Pos[sizeType] != "" && (grids[curCol + 1][curRow - 1].Pos[sizeType] == grids[curCol][curRow].Pos[sizeType]))
-                    // {
-                    //     res.Add(grids[curCol + 1][curRow - 1]);
-                    //     var resList = GetSameRingCellByDirection(count, curRow - 1, curCol + 1, sizeType, grids, Direction.UP);
-                    //     res.AddRange(resList);
-                    // }
+                    Debug.Log("LEFTUP方向");
+                    GetSameRingCell(count, curRow + 1, curCol - 1, curRow, curCol, sizeType, grids, direc, res);
                     break;
                 case Direction.RIGHTUP:
-                    GetSameRingCell(count, curRow - 1, curCol + 1, curRow, curCol, sizeType, grids, res);
-
-                    // if (grids[curCol - 1][curRow + 1] && grids[curCol - 1][curRow + 1].Pos[sizeType] != "" && (grids[curCol - 1][curRow + 1].Pos[sizeType] == grids[curCol][curRow].Pos[sizeType]))
-                    // {
-                    //     res.Add(grids[curCol - 1][curRow + 1]);
-                    //     var resList = GetSameRingCellByDirection(count, curRow + 1, curCol - 1, sizeType, grids, Direction.UP);
-                    //     res.AddRange(resList);
-                    // }
+                    Debug.Log("RIGHTUP方向");
+                    GetSameRingCell(count, curRow + 1, curCol + 1, curRow, curCol, sizeType, grids, direc, res);
                     break;
                 case Direction.RIGHTDOWN:
-                    GetSameRingCell(count, curRow + 1, curCol + 1, curRow, curCol, sizeType, grids, res);
-                    // if (grids[curCol + 1][curRow + 1]  && grids[curCol + 1][curRow + 1].Pos[sizeType] != "" && (grids[curCol + 1][curRow + 1].Pos[sizeType] == grids[curCol][curRow].Pos[sizeType]))
-                    // {
-                    //     res.Add(grids[curCol + 1][curRow + 1]);
-                    //     var resList = GetSameRingCellByDirection(count, curRow + 1, curCol + 1, sizeType, grids, Direction.UP);
-                    //     res.AddRange(resList);
-                    // }
+                    Debug.Log("RIGHTDOWN方向");
+                    GetSameRingCell(count, curRow - 1, curCol - 1, curRow, curCol, sizeType, grids, direc, res);
                     break;
             }
             return res;
         }
 
 
-        private static void GetSameRingCell(int count, int nextRow, int nextCol, int curRow, int curCol, string sizeType, List<List<Cell>> grids, List<Cell> res) {
-            // List<Cell> res = new List<Cell>();
-            Debug.LogError("下一行，下一列: " + nextRow + " " + nextCol);
-            if (!(nextCol < count && nextCol >= 0 && nextRow < count && nextRow >= 0) || grids[nextCol][nextRow].Pos[sizeType] == "")
-            {
-                Debug.LogError("返回");
-                return;
-            }
-            Debug.LogError("进入判断");
+        private static void GetSameRingCell(int count, int nextRow, int nextCol, int curRow, int curCol, string sizeType, List<List<Cell>> grids, Direction direc, List<Cell> res) {
+            //Debug.LogError("当前cell位置: " + curCol + " " + curRow);
+            //Debug.LogError("下次判断位置: " + nextCol + " " + nextRow);
+            if (!(nextCol < count && nextCol >= 0 && nextRow < count && nextRow >= 0) || grids[nextCol][nextRow].Pos[sizeType] == "") return;
 
             if ((grids[nextCol][nextRow].Pos[sizeType] == grids[curCol][curRow].Pos[sizeType]))
             {
-                Debug.LogError("进入");
-
                 res.Add(grids[nextCol][nextRow]);
-                var resList = GetSameRingCellByDirection(count, nextRow, nextCol, sizeType, grids, Direction.UP);
+                var resList = GetSameRingCellByDirection(count, nextRow, nextCol, sizeType, grids, direc);
                 res.AddRange(resList);
-                Debug.LogError("res: " + res);
-
             }
-            Debug.LogError("if外");
-
         }
-        
 
     }
 }

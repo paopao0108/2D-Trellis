@@ -51,6 +51,7 @@ namespace Controller
 
         public static bool isMyTurn()
         {
+            //return true;
             if (PhotonNetwork.IsMasterClient) return playerTurn == PlayerType.MasterPlayer;
             else return playerTurn == PlayerType.ClientPlayer;
         }

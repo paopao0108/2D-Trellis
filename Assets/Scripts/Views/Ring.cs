@@ -102,13 +102,14 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
                 _disabled = --_num <= 0; // 放置一个ring之后，数目减少
                 if (_disabled) SetTransparency(Constants.Vars.transparency);
                 NetworkManager.Instance.photonView.RPC("ChangeTurn", RpcTarget.AllBuffered);
+
                 GridPanel.grids[curCol][curRow].Pos[_rt.tag] = NetworkManager.playerTurn.ToString(); // 将ring的类型存下
 
                 Debug.Log("sizeType: " + _rt.tag);
                 Debug.Log("playerTurn: " + NetworkManager.playerTurn.ToString());
                 // 判断输赢
-                if (Utils.Utils.IsSuccession(GridPanel.row, curRow, curCol, GridPanel.grids[curCol][curRow].Pos[_rt.tag], GridPanel.grids))
-                    Debug.Log("游戏结束！！");
+                if (Utils.Utils.IsSuccession(GridPanel.row, curRow, curCol, _rt.tag, GridPanel.grids)) Debug.Log("游戏结束！！");
+
             }
         }
         DeClone();
