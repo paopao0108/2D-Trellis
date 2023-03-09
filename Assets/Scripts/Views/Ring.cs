@@ -46,18 +46,12 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
         _rtClone = null;
     }
 
-
     public void OnBeginDrag(PointerEventData eventData)
     {
-        Debug.Log("====================================");
-        Debug.Log("实际轮到：" + NetworkManager.playerTurn);
-        //Debug.Log("获得次序：" + player.PlayerType);
-        Debug.Log("====================================");
-
         _isOnUI = RectTransformUtility.RectangleContainsScreenPoint(_rt, Input.mousePosition);
-        if (!_isOnUI || _disabled) return;
-
-        Debug.LogError("OnBeginDrag");
+        if (!_isOnUI || _disabled || !NetworkManager.isMyTurn()) return;
+        
+        Debug.Log("OnBeginDrag " + NetworkManager.isMyTurn());
         Clone();
         RectTransformUtility.ScreenPointToWorldPointInRectangle(_clone.GetComponent<RectTransform>(),
             eventData.position,
@@ -66,22 +60,21 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (!_isOnUI || _disabled) return;
-
+        if (!_isOnUI || _disabled || !NetworkManager.isMyTurn()) return;
+        
         _rtClone = _clone.GetComponent<RectTransform>();
         RectTransformUtility.ScreenPointToWorldPointInRectangle(_rtClone, eventData.position,
             eventData.pressEventCamera, out _newMousePos);
         _rtClone.position =
             _rt.position + new Vector3(_newMousePos.x - _startMousePos.x, _newMousePos.y - _startMousePos.y, 0);
         //Locate();
-
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        if (!_isOnUI || _disabled) return;
-
-        Debug.LogError("OnEndDrag");
+        if (!_isOnUI || _disabled || !NetworkManager.isMyTurn()) return;
+        
+        Debug.Log("OnEndDrag");
         if (_clone != null) _clone._disabled = true;
 
         Locate();
@@ -103,23 +96,29 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
     {
         if (curRow <= GridPanel.row - 1 && curRow >= 0 && curCol <= GridPanel.row - 1 && curCol >= 0)
         {
-            if (GridPanel.grids[curCol][curRow].hasPos[_rt.tag])
+            if (GridPanel.grids[curCol][curRow].Pos[_rt.tag] == "")
             {
-                Debug.LogError("in");
                 _gridPanel.photonView.RPC("SetPosition", RpcTarget.AllBuffered, RingType, curRow, curCol);
                 _disabled = --_num <= 0; // 放置一个ring之后，数目减少
                 if (_disabled) SetTransparency(Constants.Vars.transparency);
-                GridPanel.grids[curCol][curRow].hasPos[_rt.tag] = false;
+                NetworkManager.Instance.photonView.RPC("ChangeTurn", RpcTarget.AllBuffered);
+                GridPanel.grids[curCol][curRow].Pos[_rt.tag] = NetworkManager.playerTurn.ToString(); // 将ring的类型存下
+
+                Debug.Log("sizeType: " + _rt.tag);
+                Debug.Log("playerTurn: " + NetworkManager.playerTurn.ToString());
+                // 判断输赢
+                if (Utils.Utils.IsSuccession(GridPanel.row, curRow, curCol, GridPanel.grids[curCol][curRow].Pos[_rt.tag], GridPanel.grids))
+                    Debug.Log("游戏结束！！");
             }
         }
         DeClone();
     }
 
-    [PunRPC]
+
+
     public void SetColor(PlayerType playerType)
     {
         GetComponent<Image>().color = playerType == PlayerType.MasterPlayer ? Constants.Colors.MasterColor : Constants.Colors.ClientColor;
-        //Debug.Log("SetColor : " + GetComponent<Image>().color);
     }
 
     public void SetTransparency(float transparency)

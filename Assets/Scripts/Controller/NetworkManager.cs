@@ -1,3 +1,4 @@
+using System;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
@@ -8,7 +9,16 @@ namespace Controller
     public class NetworkManager : MonoBehaviourPunCallbacks
     {
         public GameObject playerPrefab;
-        public static PlayerType playerTurn = PlayerType.MasterPlayer; // ¿ØÖÆÍæ¼Ò
+        public static PlayerType playerTurn = PlayerType.MasterPlayer;
+        private static NetworkManager _instance;
+        
+        public static NetworkManager Instance => _instance;
+        
+        private void Awake()
+        {
+            _instance = this;
+        }
+
         private void Start()
         {   
             PhotonNetwork.ConnectUsingSettings();
@@ -24,7 +34,8 @@ namespace Controller
             if (PhotonNetwork.JoinOrCreateRoom("room01", roomOptions, TypedLobby.Default))
                 Debug.Log("JoinOrCreateRoom");
         }
-
+        
+        // æœ‰å…¶ä»–çŽ©å®¶è¿›å…¥
         public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
         {
             base.OnPlayerEnteredRoom(newPlayer);
@@ -32,9 +43,16 @@ namespace Controller
         }
 
         [PunRPC]
-        public static void ChangeTurn()
+        public void ChangeTurn()
         {
             playerTurn = (playerTurn == PlayerType.MasterPlayer) ? PlayerType.ClientPlayer : PlayerType.MasterPlayer;
+            Debug.LogError("ChangeTurn: now is " + playerTurn);
+        }
+
+        public static bool isMyTurn()
+        {
+            if (PhotonNetwork.IsMasterClient) return playerTurn == PlayerType.MasterPlayer;
+            else return playerTurn == PlayerType.ClientPlayer;
         }
     }
 }

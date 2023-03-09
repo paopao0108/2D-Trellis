@@ -10,30 +10,10 @@ namespace Controller
         public PlayerType PlayerType =>
             PhotonNetwork.IsMasterClient ? PlayerType.MasterPlayer : PlayerType.ClientPlayer;
 
-        public Ring[] rings;
-
-        private void Start()
-        {
-            //rings = GameObject.Find("RingPanel").gameObject.GetComponentsInChildren<Ring>();
-            
-        }
-
         private void Update()
         {
             if (!photonView.IsMine) return;
-
-            //Debug.Log("设置的当前玩家： " + NetworkManager.playerTurn);
-            //Debug.Log("获取当前玩家： " + this.PlayerType);
-            //if (NetworkManager.playerTurn != this.PlayerType)
-            //{
-            //    RingPanel.DisableRing(RingPanel.Large);
-            //}
-            //else
-            //{
-            //    RingPanel.EnableRing(RingPanel.Large);
-            //}
         }
-
 
         public override void OnJoinedRoom()
         {
@@ -42,7 +22,7 @@ namespace Controller
             var player = PhotonNetwork.Instantiate(gameObject.name, Vector3.zero, gameObject.transform.rotation);
             Debug.Log("Enter Room");
             InitInfoPanel();
-            InitRingPanel();
+            InitRingPanel(PlayerType);
         }
 
         public void InitInfoPanel()
@@ -59,12 +39,9 @@ namespace Controller
             }
         }
 
-
-        public void InitRingPanel()
+        public void InitRingPanel(PlayerType playerType)
         {
-            RingPanel.Large.photonView.RPC("SetColor", RpcTarget.AllBuffered, PlayerType);
-            RingPanel.Middle.photonView.RPC("SetColor", RpcTarget.AllBuffered, PlayerType);
-            RingPanel.Small.photonView.RPC("SetColor", RpcTarget.AllBuffered, PlayerType);
+            RingPanel.InitRingColor(playerType);
         }
     }
 }

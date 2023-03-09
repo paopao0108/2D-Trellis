@@ -11,19 +11,16 @@ public class RingPanel : MonoBehaviour
     private static RingPanel _instance;
     private static int[] nums = new int[] { 3, 3, 3 };
 
-    [NonSerialized] public static Ring Large;
-    [NonSerialized] public static Ring Middle;
-    [NonSerialized] public static Ring Small;
+    [NonSerialized] public static Ring LRing;
+    [NonSerialized] public static Ring MRing;
+    [NonSerialized] public static Ring SRing;
 
     private void Awake()
     {
         _instance = this;
-        var objs = GameObject.FindGameObjectsWithTag("num");
-        Debug.Log("num: " + objs.Length);
-
-        Large = GameObject.Find("LRing").GetComponent<Ring>();
-        Middle = GameObject.Find("MRing").GetComponent<Ring>();
-        Small = GameObject.Find("SRing").GetComponent<Ring>();
+        LRing = GameObject.Find("LRing").GetComponent<Ring>();
+        MRing = GameObject.Find("MRing").GetComponent<Ring>();
+        SRing = GameObject.Find("SRing").GetComponent<Ring>();
     }
 
     public static RingPanel Instance => _instance;
@@ -34,15 +31,15 @@ public class RingPanel : MonoBehaviour
         nums[(int)ringType]--;
     }
 
-    // 启用Ring脚本
-    public static void EnableRing(Ring ring)
+    /// <summary>
+    /// 鍒濆鍖杛ing棰滆壊
+    /// </summary>
+    /// <param name="playerType"></param>
+    public static void InitRingColor(PlayerType playerType)
     {
-        if (ring.GetComponent<Ring>() == null) ring.AddComponent<Ring>();
+        LRing.SetColor(playerType);
+        MRing.SetColor(playerType);
+        SRing.SetColor(playerType);
     }
 
-    // 禁用Ring脚本
-    public static void DisableRing(Ring ring)
-    {
-        if (ring.GetComponent<Ring>()) Destroy(ring.GetComponent<Ring>());
-    }
 }
