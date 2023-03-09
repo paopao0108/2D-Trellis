@@ -7,8 +7,8 @@ namespace Controller
 {
     public class Player : MonoBehaviourPunCallbacks
     {
-        public PlayerType PlayerType =>
-            PhotonNetwork.IsMasterClient ? PlayerType.MasterPlayer : PlayerType.ClientPlayer;
+        public EPlayerType EPlayerType =>
+            PhotonNetwork.IsMasterClient ? EPlayerType.MasterPlayer : EPlayerType.ClientPlayer;
 
         private void Update()
         {
@@ -22,26 +22,26 @@ namespace Controller
             var player = PhotonNetwork.Instantiate(gameObject.name, Vector3.zero, gameObject.transform.rotation);
             Debug.Log("Enter Room");
             InitInfoPanel();
-            InitRingPanel(PlayerType);
+            InitRingPanel(EPlayerType);
         }
 
         public void InitInfoPanel()
         {
-            if (PlayerType == PlayerType.MasterPlayer)
+            if (EPlayerType == EPlayerType.MasterPlayer)
             {
                 InfoPanel.PlayerPanel1.photonView.RPC("SetStatus", RpcTarget.AllBuffered, true);
-                InfoPanel.PlayerPanel1.photonView.RPC("SetRingColor", RpcTarget.AllBuffered, PlayerType);
+                InfoPanel.PlayerPanel1.photonView.RPC("SetRingColor", RpcTarget.AllBuffered, EPlayerType);
             }
             else
             {
                 InfoPanel.PlayerPanel2.photonView.RPC("SetStatus", RpcTarget.AllBuffered, true);
-                InfoPanel.PlayerPanel2.photonView.RPC("SetRingColor", RpcTarget.AllBuffered, PlayerType);
+                InfoPanel.PlayerPanel2.photonView.RPC("SetRingColor", RpcTarget.AllBuffered, EPlayerType);
             }
         }
 
-        public void InitRingPanel(PlayerType playerType)
+        public void InitRingPanel(EPlayerType ePlayerType)
         {
-            RingPanel.InitRingColor(playerType);
+            RingPanel.InitRingColor(ePlayerType);
         }
     }
 }

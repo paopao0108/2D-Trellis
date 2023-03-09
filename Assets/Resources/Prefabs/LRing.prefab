@@ -90,4 +90,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RingPrefab: {fileID: 7917737096599836576}
-  RingType: 0
+  player: {fileID: 0}

@@ -6,10 +6,17 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Utils;
 
+
 public class RingPanel : MonoBehaviour
 {
     private static RingPanel _instance;
-    private static int[] nums = new int[] { 3, 3, 3 };
+
+    public static Dictionary<ERingType, int> Nums = new()
+    {
+        [ERingType.LRing] = Constants.Vars.PerRingNum,
+        [ERingType.MRing] = Constants.Vars.PerRingNum,
+        [ERingType.SRing] = Constants.Vars.PerRingNum,
+    };
 
     [NonSerialized] public static Ring LRing;
     [NonSerialized] public static Ring MRing;
@@ -25,21 +32,21 @@ public class RingPanel : MonoBehaviour
 
     public static RingPanel Instance => _instance;
 
-    [PunRPC]
-    public static void UpdateNum(RingType ringType)
+    public static void Decrease(ERingType ringType)
     {
-        nums[(int)ringType]--;
+        Nums[ringType]--;
     }
 
-    /// <summary>
-    /// 初始化ring颜色
-    /// </summary>
-    /// <param name="playerType"></param>
-    public static void InitRingColor(PlayerType playerType)
+    public static bool HasEnough(ERingType ringType)
     {
-        LRing.SetColor(playerType);
-        MRing.SetColor(playerType);
-        SRing.SetColor(playerType);
+        return Nums[ringType] > 0;
     }
 
+    // 初始化ring颜色
+    public static void InitRingColor(EPlayerType ePlayerType)
+    {
+        LRing.SetColor(ePlayerType);
+        MRing.SetColor(ePlayerType);
+        SRing.SetColor(ePlayerType);
+    }
 }

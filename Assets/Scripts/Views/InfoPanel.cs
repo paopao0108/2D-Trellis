@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.Assertions;
-using Views;
 
 public class InfoPanel : MonoBehaviour
 {

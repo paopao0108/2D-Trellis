@@ -3,17 +3,11 @@ using UnityEngine;
 
 namespace Utils
 {
-    public enum PlayerType
+    public enum EPlayerType
     {
+        None,
         MasterPlayer,
-        ClientPlayer
-    }
-
-    public enum RingType
-    {
-        Large,
-        Middle,
-        Small
+        ClientPlayer,
     }
 
     public static class Constants
@@ -27,7 +21,10 @@ namespace Utils
 
         public static class Vars
         {
-            public static readonly float transparency = 0.5f;
+            public const float Transparency = 0.5f;
+            public const int PerRingNum = 3; // 初始各类大小的圆圈数)
+            public const int RowNum = 3; // 表格行/列数
+            public const int ColNum = 3; // 表格行/列数
         }
     }
 }

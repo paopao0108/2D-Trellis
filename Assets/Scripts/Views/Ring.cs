@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Controller;
 using Photon.Pun;
@@ -8,21 +7,36 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Utils;
 
+
+public enum ERingType
+{
+    LRing,
+    MRing,
+    SRing
+}
+
 public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     private bool _isOnUI;
     private bool _disabled = false;
     private Vector3 _startMousePos, _newMousePos;
-    private int _num = 3;
     private Ring _clone;
     private RectTransform _rt, _rtClone;
     private Transform _zeroPoint;
     private GridPanel _gridPanel;
-
     public Ring RingPrefab;
-    public RingType RingType;
-    [NonSerialized] public int curRow, curCol;
     public Player player;
+
+    [NonSerialized] public int CurRow, CurCol;
+
+    public ERingType RingType =>
+        _rt.tag switch
+        {
+            "L" => ERingType.LRing,
+            "M" => ERingType.MRing,
+            "S" => ERingType.SRing,
+            _ => throw new ArgumentOutOfRangeException(_rt.tag)
+        };
 
     private void Awake()
     {
@@ -31,7 +45,7 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
         _gridPanel = GameObject.Find("GamePanel/GridPanel").GetComponent<GridPanel>();
     }
 
-    public void Clone()
+    private void Clone()
     {
         _clone = Instantiate(this, _rt.parent);
         _rtClone = _clone.GetComponent<RectTransform>();
@@ -39,7 +53,7 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
         // PhotonNetwork.AllocateViewID(_clone.photonView);
     }
 
-    public void DeClone()
+    private void DeClone()
     {
         Destroy(_rtClone.gameObject);
         _clone = null;
@@ -50,7 +64,7 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
     {
         _isOnUI = RectTransformUtility.RectangleContainsScreenPoint(_rt, Input.mousePosition);
         if (!_isOnUI || _disabled || !NetworkManager.isMyTurn()) return;
-        
+
         Debug.Log("OnBeginDrag " + NetworkManager.isMyTurn());
         Clone();
         RectTransformUtility.ScreenPointToWorldPointInRectangle(_clone.GetComponent<RectTransform>(),
@@ -61,7 +75,7 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
     public void OnDrag(PointerEventData eventData)
     {
         if (!_isOnUI || _disabled || !NetworkManager.isMyTurn()) return;
-        
+
         _rtClone = _clone.GetComponent<RectTransform>();
         RectTransformUtility.ScreenPointToWorldPointInRectangle(_rtClone, eventData.position,
             eventData.pressEventCamera, out _newMousePos);
@@ -73,7 +87,7 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
     public void OnEndDrag(PointerEventData eventData)
     {
         if (!_isOnUI || _disabled || !NetworkManager.isMyTurn()) return;
-        
+
         Debug.Log("OnEndDrag");
         if (_clone != null) _clone._disabled = true;
 
@@ -88,37 +102,53 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
     {
         var posInPanel = new Vector3(_rtClone.position.x - _zeroPoint.position.x,
             _rtClone.position.y - _zeroPoint.position.y, 0);
-        curRow = Mathf.RoundToInt(posInPanel.x / Cell.CellSize);
-        curCol = Mathf.RoundToInt(posInPanel.y / Cell.CellSize);
+        CurCol = Mathf.RoundToInt(posInPanel.x / Cell.CellSize);
+        CurRow = Mathf.RoundToInt(posInPanel.y / Cell.CellSize);
     }
 
     private void HandleDragResult()
     {
-        if (curRow <= GridPanel.row - 1 && curRow >= 0 && curCol <= GridPanel.row - 1 && curCol >= 0)
+        Debug.Log($"Handle: {CurRow},{CurCol} {GridPanel.Grids[CurCol][CurRow].Pos[RingType]}");
+        if (CurRow <= GridPanel.row - 1 && CurRow >= 0 && CurCol <= GridPanel.row - 1 && CurCol >= 0)
         {
-            if (GridPanel.grids[curCol][curRow].Pos[_rt.tag] == "")
+            if (GridPanel.Grids[CurRow][CurCol].Pos[RingType] == EPlayerType.None)
             {
-                _gridPanel.photonView.RPC("SetPosition", RpcTarget.AllBuffered, RingType, curRow, curCol);
-                _disabled = --_num <= 0; // 放置一个ring之后，数目减少
-                if (_disabled) SetTransparency(Constants.Vars.transparency);
-                NetworkManager.Instance.photonView.RPC("ChangeTurn", RpcTarget.AllBuffered);
-                GridPanel.grids[curCol][curRow].Pos[_rt.tag] = NetworkManager.playerTurn.ToString(); // 将ring的类型存下
+                _gridPanel.photonView.RPC("SetPosition", RpcTarget.AllBuffered, RingType, CurRow, CurCol);
 
-                Debug.Log("sizeType: " + _rt.tag);
-                Debug.Log("playerTurn: " + NetworkManager.playerTurn.ToString());
+                Debug.LogError($"Set {CurRow},{CurCol} to ${NetworkManager.EPlayerTurn}");
+                GridPanel.Grids[CurRow][CurCol].Pos[RingType] = NetworkManager.EPlayerTurn;
+
+                RingPanel.Decrease(RingType);
+                _disabled = !RingPanel.HasEnough(RingType);
+                Debug.Log(RingType + " left " + RingPanel.Nums[RingType]);
+
+                if (_disabled) SetTransparency(Constants.Vars.Transparency);
+
+                Debug.Log("ringType: " + RingType);
+                Debug.Log("playerTurn: " + NetworkManager.EPlayerTurn);
+
                 // 判断输赢
-                if (Utils.Utils.IsSuccession(GridPanel.row, curRow, curCol, GridPanel.grids[curCol][curRow].Pos[_rt.tag], GridPanel.grids))
-                    Debug.Log("游戏结束！！");
+                if (_gridPanel.Check(CurRow, CurCol, RingType))
+                {
+                    Debug.LogError("游戏结束! 胜利者为: " + NetworkManager.EPlayerTurn);
+                    Debug.LogError("胜利位置为: " + CurRow + " " + CurCol);
+                    _disabled = true;
+                }
+
+                // 轮到对方
+                NetworkManager.Instance.photonView.RPC("ChangeTurn", RpcTarget.AllBuffered);
             }
         }
+
         DeClone();
     }
 
 
-
-    public void SetColor(PlayerType playerType)
+    public void SetColor(EPlayerType ePlayerType)
     {
-        GetComponent<Image>().color = playerType == PlayerType.MasterPlayer ? Constants.Colors.MasterColor : Constants.Colors.ClientColor;
+        GetComponent<Image>().color = ePlayerType == EPlayerType.MasterPlayer
+            ? Constants.Colors.MasterColor
+            : Constants.Colors.ClientColor;
     }
 
     public void SetTransparency(float transparency)
