@@ -65,35 +65,35 @@ namespace Utils
             switch (direc)
             {
                 case Direction.UP:
-                    Debug.Log("UP方向");
+                    //Debug.Log("UP方向");
                     GetSameRingCell(count, curRow, curCol + 1, curRow, curCol, sizeType, grids, direc, res);
                     break;
                 case Direction.DOWN:
-                    Debug.Log("DOWN方向");
+                    //Debug.Log("DOWN方向");
                     GetSameRingCell(count, curRow, curCol - 1, curRow, curCol, sizeType, grids, direc, res);
                     break;
                 case Direction.LEFT:
-                    Debug.Log("Left方向");
+                    //Debug.Log("Left方向");
                     GetSameRingCell(count, curRow - 1, curCol, curRow, curCol, sizeType, grids, direc, res);
                     break;
                 case Direction.RIGHT:
-                    Debug.Log("RIGHT方向");
+                    //Debug.Log("RIGHT方向");
                     GetSameRingCell(count, curRow + 1, curCol, curRow, curCol, sizeType, grids, direc, res);
                     break;
                 case Direction.LEFTUP:
-                    Debug.Log("LEFTUP方向");
+                    //Debug.Log("LEFTUP方向");
                     GetSameRingCell(count, curRow - 1, curCol + 1, curRow, curCol, sizeType, grids, direc, res);
                     break;
                 case Direction.LEFTDOWN:
-                    Debug.Log("LEFTUP方向");
+                    //Debug.Log("LEFTUP方向");
                     GetSameRingCell(count, curRow + 1, curCol - 1, curRow, curCol, sizeType, grids, direc, res);
                     break;
                 case Direction.RIGHTUP:
-                    Debug.Log("RIGHTUP方向");
+                    //Debug.Log("RIGHTUP方向");
                     GetSameRingCell(count, curRow + 1, curCol + 1, curRow, curCol, sizeType, grids, direc, res);
                     break;
                 case Direction.RIGHTDOWN:
-                    Debug.Log("RIGHTDOWN方向");
+                    //Debug.Log("RIGHTDOWN方向");
                     GetSameRingCell(count, curRow - 1, curCol - 1, curRow, curCol, sizeType, grids, direc, res);
                     break;
             }

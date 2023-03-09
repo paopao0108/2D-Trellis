@@ -108,7 +108,12 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
                 Debug.Log("sizeType: " + _rt.tag);
                 Debug.Log("playerTurn: " + NetworkManager.playerTurn.ToString());
                 // 判断输赢
-                if (Utils.Utils.IsSuccession(GridPanel.row, curRow, curCol, _rt.tag, GridPanel.grids)) Debug.Log("游戏结束！！");
+                if (Utils.Utils.IsSuccession(GridPanel.row, curRow, curCol, _rt.tag, GridPanel.grids)) 
+                { 
+                    Debug.Log("游戏结束！！");
+                    //SendMessage("GameOver");
+                }
+                SendMessageUpwards("SendGameOver");
 
             }
         }
