@@ -78,7 +78,7 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
         if (!_isOnUI || _disabled || !NetworkManager.isMyTurn()) return;
         
         Debug.Log("OnEndDrag");
-        if (_clone != null) _clone._disabled = true;
+        if (_clone != null) _clone._disabled = true; // 克隆体默认不能再拖拽
 
         Locate();
         HandleDragResult();
@@ -102,23 +102,29 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
             if (GridPanel.grids[curCol][curRow].Pos[_rt.tag] == "")
             {
                 _gridPanel.photonView.RPC("SetPosition", RpcTarget.AllBuffered, RingType, curRow, curCol);
-                _disabled = --_num <= 0; // 放置一个ring之后，数目减少
-                if (_disabled) SetTransparency(Constants.Vars.transparency);
-                NetworkManager.Instance.photonView.RPC("ChangeTurn", RpcTarget.AllBuffered);
+                _disabled = --_num <= 0; // 是否没有数目（放置一个ring之后，数目减少）
+                if (_disabled) SetTransparency(Constants.Vars.transparency); // 若没有数量，则禁用（通过设置透明度来达到视觉效果）
+                
 
                 GridPanel.grids[curCol][curRow].Pos[_rt.tag] = NetworkManager.playerTurn.ToString(); // 将ring的类型存下
 
                 Debug.Log("sizeType: " + _rt.tag);
                 Debug.Log("playerTurn: " + NetworkManager.playerTurn.ToString());
+
                 // 判断输赢
                 if (Utils.Utils.IsSuccession(GridPanel.row, curRow, curCol, _rt.tag, GridPanel.grids)) 
                 { 
                     Debug.Log("游戏结束！！");
+                    GameController.winner = NetworkManager.playerTurn; // 根据此时的玩家来显示不同的游戏结束页面，结束时当前玩家为赢家
+                    _gameController.photonView.RPC("SendGameOver", RpcTarget.AllBuffered, NetworkManager.playerTurn);
                 }
 
-                // Test：无法传递给远程
+                // 测试
                 //SendMessageUpwards("SendGameOver");
-                _gameController.photonView.RPC("SendGameOver", RpcTarget.AllBuffered);
+                //GameController.winner = PlayerType.MasterPlayer;
+                //_gameController.photonView.RPC("SendGameOver", RpcTarget.AllBuffered, PlayerType.MasterPlayer);
+
+                NetworkManager.Instance.photonView.RPC("ChangeTurn", RpcTarget.AllBuffered);
             }
         }
         DeClone();
