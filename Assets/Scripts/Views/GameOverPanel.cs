@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Utils;
 
-public class GameOverPanel : MonoBehaviour
+public class GameOverPanel : MonoBehaviourPun
 {
     private PlayerType curClient; // 当前客户端
 
@@ -64,8 +64,38 @@ public class GameOverPanel : MonoBehaviour
 #endif
     }
 
-    public void OnAgainButton()
+    
+    public void OnAgainButton() // 暂时实现一端客户端点击再来一次，多端同时开始
     {
         Debug.Log("再来一次"); // 玩家重新进入房间，游戏重新开始
+        photonView.RPC("ResetGame", RpcTarget.AllBuffered); // 多端同时调用ResetGame
+    }
+
+    [PunRPC]
+    public void ResetGame()
+    {
+        // 1. 清空grids数据
+        for (int i = 0; i < GridPanel.row; i++)
+        {
+            for (int j = 0; j < GridPanel.col; j++)
+            {
+                GridPanel.grids[j][i].clear();
+            }
+        }
+        // 2. 重置圆环数量
+        Number[] nums = FindObjectsOfType<Number>();
+        foreach (var num in nums)
+        {
+            num.ResetNum();
+        }
+        // 3. 重置圆环
+        Ring[] rings = FindObjectsOfType<Ring>();
+        foreach (var ring in rings)
+        {
+            ring.ResetRing();
+        }
+
+        // 3. 处理页面跳转
+        SendMessageUpwards("GameAgain");
     }
 }

@@ -32,9 +32,16 @@ public class GameController : MonoBehaviourPun
     public void SendGameOver(PlayerType winner)
     {
         Debug.Log("接受到Ring的消息");
-        transform.Find("GameOverPanel").gameObject.SetActive(true);
+        transform.Find("GameOverPanel").gameObject.SetActive(true); // 显示gameover页面
         BroadcastMessage("GameOver", winner);
-        StopSound(bgSound); // 停止背景音乐
+        PauseSound(bgSound); // 暂停背景音乐
+    }
+
+    public void GameAgain()
+    {
+        Debug.Log("接受到 Again 的消息");
+        transform.Find("GameOverPanel").gameObject.SetActive(false); // 隐藏gameover页面
+        UnPauseSound(bgSound); // 播放背景音乐
     }
 
     public void PlaySound(AudioSource audio)
@@ -43,9 +50,15 @@ public class GameController : MonoBehaviourPun
         audio.Play();
     }
 
-    public void StopSound(AudioSource audio)
+    public void PauseSound(AudioSource audio)
     {
         if (!audio) return;
-        audio.Stop();
+        audio.Pause();
+    }
+
+    public void UnPauseSound(AudioSource audio)
+    {
+        if (!audio) return;
+        audio.UnPause();
     }
 }

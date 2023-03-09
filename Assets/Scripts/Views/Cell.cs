@@ -12,4 +12,17 @@ public class Cell : MonoBehaviour
         { "S" , "" }
     };
     public static float CellSize = 100;
+
+
+    public void clear()
+    {
+        Transform[] trans = GetComponentsInChildren<Transform>();
+        foreach(var item in trans)
+        {
+            if (item.GetComponent<Cell>() == null) Destroy(item.gameObject);
+        }
+        Pos["L"] = "";
+        Pos["M"] = "";
+        Pos["S"] = "";
+    }
 }

@@ -9,12 +9,12 @@ namespace Controller
     public class NetworkManager : MonoBehaviourPunCallbacks
     {
         private static NetworkManager _instance;
-        private RoomOptions roomOptions;
 
+        public static RoomOptions roomOptions;
         public static NetworkManager Instance => _instance;
         public GameObject playerPrefab;
         public static PlayerType playerTurn = PlayerType.MasterPlayer;
-        
+
         private void Awake()
         {
             _instance = this;
@@ -36,12 +36,13 @@ namespace Controller
                 Debug.Log("JoinOrCreateRoom");
         }
         
-        // 有其他玩家进入
+        // 有玩家进入
         public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
         {
             base.OnPlayerEnteredRoom(newPlayer);
             Debug.Log("OnPlayerEnteredRoom");
         }
+
 
         [PunRPC]
         public void ChangeTurn()
@@ -58,9 +59,13 @@ namespace Controller
 
         public static bool IsReady()
         {
-            bool isReady = false;
-            //roomOptions
-            return isReady;
+            //Debug.LogError("PhotonNetwork.CountOfPlayers" + PhotonNetwork.CountOfPlayers);
+            //Debug.LogError("roomOptions.MaxPlayers" + roomOptions.MaxPlayers);
+
+            //foreach (var player in PhotonNetwork.PlayerList) {
+            //    Debug.LogError("玩家：" + player);
+            //}
+            return PhotonNetwork.PlayerList.Length == roomOptions.MaxPlayers;
         }
     }
 }
