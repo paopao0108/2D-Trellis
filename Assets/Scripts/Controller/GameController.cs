@@ -1,8 +1,9 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameController : MonoBehaviour
+public class GameController : MonoBehaviourPun
 {
     void Start()
     {
@@ -13,6 +14,7 @@ public class GameController : MonoBehaviour
         
     }
 
+    [PunRPC]
     public void SendGameOver()
     {
         Debug.Log("接受到Ring的消息");

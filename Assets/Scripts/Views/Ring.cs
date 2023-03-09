@@ -18,6 +18,7 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
     private RectTransform _rt, _rtClone;
     private Transform _zeroPoint;
     private GridPanel _gridPanel;
+    private GameController _gameController;
 
     public Ring RingPrefab;
     public RingType RingType;
@@ -29,6 +30,8 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
         _rt = transform.GetComponent<RectTransform>();
         _zeroPoint = GameObject.Find("zeroPoint").transform;
         _gridPanel = GameObject.Find("GamePanel/GridPanel").GetComponent<GridPanel>();
+        _gameController = GameObject.Find("Canvas").GetComponent< GameController> ();
+        Debug.Log("canvas:" + _gameController);
     }
 
     public void Clone()
@@ -111,10 +114,11 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
                 if (Utils.Utils.IsSuccession(GridPanel.row, curRow, curCol, _rt.tag, GridPanel.grids)) 
                 { 
                     Debug.Log("游戏结束！！");
-                    //SendMessage("GameOver");
                 }
-                SendMessageUpwards("SendGameOver");
 
+                // Test：无法传递给远程
+                //SendMessageUpwards("SendGameOver");
+                _gameController.photonView.RPC("SendGameOver", RpcTarget.AllBuffered);
             }
         }
         DeClone();
