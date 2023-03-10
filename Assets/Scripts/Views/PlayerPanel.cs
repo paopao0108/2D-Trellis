@@ -14,6 +14,10 @@ namespace Views
         //private SpriteRenderer _uiRingColor;
         private Image _uiRingColor;
 
+
+        //public static RuntimeAnimatorController BlueBlinking;
+        //public static Animator WhiteBlinking;
+
         private void Awake()
         {
             _uiName = transform.Find("Text").GetComponent<TextMeshProUGUI>();

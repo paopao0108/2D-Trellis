@@ -6,9 +6,9 @@ using Utils;
 
 public class GameController : MonoBehaviourPun
 {
-    private static GameController _instance;
+    //private static GameController _instance;
 
-    public static GameController Instance => _instance;
+    public static GameController Instance;
 
     public static PlayerType winner;
     public AudioSource dropSound;
@@ -16,22 +16,19 @@ public class GameController : MonoBehaviourPun
 
     private void Awake()
     {
-        _instance = this;
+        Instance = this;
         PlaySound(bgSound);
     }
-    void Start()
-    {
-    }
 
-    void Update()
+    private void Update()
     {
-        
     }
 
     [PunRPC]
     public void SendGameOver(PlayerType winner)
     {
-        Debug.Log("接受到Ring的消息");
+        //Debug.Log("接受到Ring的消息");
+        //System.Threading.Thread.Sleep(500);
         transform.Find("GameOverPanel").gameObject.SetActive(true); // 显示gameover页面
         BroadcastMessage("GameOver", winner);
         PauseSound(bgSound); // 暂停背景音乐
@@ -39,7 +36,7 @@ public class GameController : MonoBehaviourPun
 
     public void GameAgain()
     {
-        Debug.Log("接受到 Again 的消息");
+        //Debug.Log("接受到 Again 的消息");
         transform.Find("GameOverPanel").gameObject.SetActive(false); // 隐藏gameover页面
         UnPauseSound(bgSound); // 播放背景音乐
     }
@@ -61,4 +58,5 @@ public class GameController : MonoBehaviourPun
         if (!audio) return;
         audio.UnPause();
     }
+
 }

@@ -49,7 +49,7 @@ public class GridPanel : MonoBehaviourPun
     [PunRPC]
     public void SetPosition(RingType ringType, int row, int col)
     {
-        Debug.LogError("SetPosition: " + ringType + " " + row + " " + col + "  玩家： " + player);
+        //Debug.LogError("SetPosition: "+ "row: " +  row + " col: " + col);
         Ring clone; // 默认克隆large
         
         clone = Instantiate<Ring>(RingPrefabs[ringType], grids[col][row].transform, false);

@@ -19,11 +19,6 @@ public class Number : MonoBehaviour
         numText.text = "x" + num.ToString();
     }
 
-    void Update()
-    {
-        
-    }
-
     public void DecreaseNum()
     {
         numText.text = "x" + (--num).ToString();

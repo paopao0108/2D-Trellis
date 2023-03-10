@@ -38,12 +38,6 @@ public class RingPanel : MonoBehaviour
 
     public static RingPanel Instance => _instance;
 
-    //[PunRPC]
-    //public static void UpdateNum(RingType ringType)
-    //{
-    //    nums[(int)ringType]--;
-    //}
-
     /// <summary>
     /// 初始化ring颜色
     /// </summary>

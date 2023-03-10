@@ -13,7 +13,6 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
     private bool _isOnUI;
     private bool _disabled = false;
     private Vector3 _startMousePos, _newMousePos;
-    private int _num = 3;
     private Ring _clone;
     private RectTransform _rt, _rtClone;
     private Transform _zeroPoint;
@@ -31,7 +30,6 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
         _zeroPoint = GameObject.Find("zeroPoint").transform;
         _gridPanel = GameObject.Find("GamePanel/GridPanel").GetComponent<GridPanel>();
         _gameController = GameObject.Find("Canvas").GetComponent<GameController>();
-        //Debug.Log("canvas:" + _gameController);
     }
 
     public void ResetRing()
@@ -43,8 +41,6 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
     {
         _clone = Instantiate(this, _rt.parent);
         _rtClone = _clone.GetComponent<RectTransform>();
-        // if (_clone.photonView == null) _clone.gameObject.AddComponent<PhotonView>();
-        // PhotonNetwork.AllocateViewID(_clone.photonView);
     }
 
     public void DeClone()
@@ -56,11 +52,13 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        Debug.LogError("准备就绪？？" + NetworkManager.IsReady());
+        //Debug.LogError("准备就绪: " + NetworkManager.IsReady());
         _isOnUI = RectTransformUtility.RectangleContainsScreenPoint(_rt, Input.mousePosition);
-        if (!_isOnUI || _disabled || !NetworkManager.isMyTurn() || !NetworkManager.IsReady()) return;
         
-        Debug.Log("OnBeginDrag " + NetworkManager.isMyTurn());
+        // 测试
+        if (!_isOnUI || _disabled || !NetworkManager.isMyTurn() || !NetworkManager.IsReady()) return;
+        //if (!_isOnUI || _disabled) return;
+
         Clone();
         RectTransformUtility.ScreenPointToWorldPointInRectangle(_clone.GetComponent<RectTransform>(),
             eventData.position,
@@ -69,20 +67,23 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
 
     public void OnDrag(PointerEventData eventData)
     {
+        // 测试
         if (!_isOnUI || _disabled || !NetworkManager.isMyTurn() || !NetworkManager.IsReady()) return;
-        
+        //if (!_isOnUI || _disabled) return;
+
         _rtClone = _clone.GetComponent<RectTransform>();
         RectTransformUtility.ScreenPointToWorldPointInRectangle(_rtClone, eventData.position,
             eventData.pressEventCamera, out _newMousePos);
         _rtClone.position =
             _rt.position + new Vector3(_newMousePos.x - _startMousePos.x, _newMousePos.y - _startMousePos.y, 0);
-        //Locate();
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        // 测试
         if (!_isOnUI || _disabled || !NetworkManager.isMyTurn() || !NetworkManager.IsReady()) return;
-        
+        //if (!_isOnUI || _disabled) return;
+
         Debug.Log("OnEndDrag");
         if (_clone != null) _clone._disabled = true; // 克隆体默认不能再拖拽
 
@@ -97,8 +98,29 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
     {
         var posInPanel = new Vector3(_rtClone.position.x - _zeroPoint.position.x,
             _rtClone.position.y - _zeroPoint.position.y, 0);
-        curRow = Mathf.RoundToInt(posInPanel.x / Cell.CellSize);
-        curCol = Mathf.RoundToInt(posInPanel.y / Cell.CellSize);
+
+        //curRow = Mathf.RoundToInt(posInPanel.x / Cell.CellSize);
+        //curCol = Mathf.RoundToInt(posInPanel.y / Cell.CellSize);
+        // 改用鼠标在面板中的位置
+        var mouseInPanel = new Vector3(_newMousePos.x - _zeroPoint.position.x,
+            _newMousePos.y - _zeroPoint.position.y, 0);
+        curRow = Mathf.FloorToInt(mouseInPanel.x / Cell.CellSize);
+        curCol = Mathf.FloorToInt(mouseInPanel.y / Cell.CellSize);
+
+        // 位置测试
+        //Debug.LogError("原点位置：" + _zeroPoint.position);
+
+        //Debug.LogError("圆环在面板中位置：" + posInPanel);
+        //Debug.LogError("圆环在面板中坐标：" + curRow + " " + curCol);
+
+        //var mouseInPanel = new Vector3(_newMousePos.x - _zeroPoint.position.x,
+            //_newMousePos.y - _zeroPoint.position.y, 0);
+        Debug.LogError("鼠标位置：" + _newMousePos);
+        Debug.LogError("鼠标在面板中位置：" + mouseInPanel);
+        Debug.LogError("鼠标在面板中坐标：" + Mathf.Floor(mouseInPanel.x / Cell.CellSize) + " " +  Mathf.Floor(mouseInPanel.y / Cell.CellSize));
+        Debug.LogError("鼠标在面板中坐标：" + Mathf.RoundToInt(mouseInPanel.x / Cell.CellSize) + " " + Mathf.RoundToInt(mouseInPanel.y / Cell.CellSize));
+        //var posInPanel = new Vector3(_newMousePos.x - _zeroPoint.position.x,
+        //    _newMousePos.y - _zeroPoint.position.y, 0);
     }
 
     private void HandleDragResult()
@@ -107,29 +129,20 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
         {
             if (GridPanel.grids[curCol][curRow].Pos[_rt.tag] == "")
             {
-
-                // 测试数量字典
-                Debug.Log("字典");
-                Debug.Log(RingPanel.Instance.ringNums["L"]);
-                // 圆环数量减少
-                Debug.Log("圆环：" + _rt.tag + " 圆环面板：" + RingPanel.Instance.ringNums + " 文本：" + RingPanel.Instance.ringNums[_rt.tag]);
                 RingPanel.Instance.ringNums[_rt.tag].DecreaseNum();
 
                 _gridPanel.photonView.RPC("SetPosition", RpcTarget.AllBuffered, RingType, curRow, curCol); // 注意：setposition会销毁克隆体
-
-                
 
                 // 音效播放
                 _gameController.PlaySound(_gameController.dropSound);
 
                 _disabled = RingPanel.Instance.ringNums[_rt.tag].num <= 0;
-                //_disabled = --_num <= 0; // 是否没有数目（放置一个ring之后，数目减少）
                 if (_disabled) SetTransparency(Constants.Vars.transparency); // 若没有数量，则禁用（通过设置透明度来达到视觉效果）
                 
                 GridPanel.grids[curCol][curRow].Pos[_rt.tag] = NetworkManager.playerTurn.ToString(); // 将ring的类型存下
 
-                Debug.Log("sizeType: " + _rt.tag);
-                Debug.Log("playerTurn: " + NetworkManager.playerTurn.ToString());
+                //Debug.Log("sizeType: " + _rt.tag);
+                //Debug.Log("playerTurn: " + NetworkManager.playerTurn.ToString());
 
                 // 判断输赢
                 if (Utils.Utils.IsSuccession(GridPanel.row, curRow, curCol, _rt.tag, GridPanel.grids)) 
@@ -143,7 +156,6 @@ public class Ring : MonoBehaviourPun, IBeginDragHandler, IDragHandler, IEndDragH
                 //_gameController.photonView.RPC("SendGameOver", RpcTarget.AllBuffered, PlayerType.MasterPlayer);
 
                 NetworkManager.Instance.photonView.RPC("ChangeTurn", RpcTarget.AllBuffered);
-                
             }
         }
         DeClone();

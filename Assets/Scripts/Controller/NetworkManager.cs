@@ -3,12 +3,14 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 using Utils;
+using Views;
 
 namespace Controller
 {
     public class NetworkManager : MonoBehaviourPunCallbacks
     {
         private static NetworkManager _instance;
+
 
         public static RoomOptions roomOptions;
         public static NetworkManager Instance => _instance;
@@ -23,6 +25,15 @@ namespace Controller
         private void Start()
         {   
             PhotonNetwork.ConnectUsingSettings(); // 连接到大厅
+        }
+
+        private void Update()
+        {
+            if (isMyTurn()) TurnPanl.ShowTurn();
+            else TurnPanl.HideTurn();
+
+            //if (isMyTurn()) PlayerPanel.BlinkingRing();
+            //else PlayerPanel.UnBlinkingRing();
         }
 
         public override void OnConnectedToMaster()
@@ -48,7 +59,7 @@ namespace Controller
         public void ChangeTurn()
         {
             playerTurn = (playerTurn == PlayerType.MasterPlayer) ? PlayerType.ClientPlayer : PlayerType.MasterPlayer;
-            Debug.LogError("ChangeTurn: now is " + playerTurn);
+            //Debug.LogError("ChangeTurn: now is " + playerTurn);
         }
 
         public static bool isMyTurn()
@@ -59,13 +70,9 @@ namespace Controller
 
         public static bool IsReady()
         {
-            //Debug.LogError("PhotonNetwork.CountOfPlayers" + PhotonNetwork.CountOfPlayers);
-            //Debug.LogError("roomOptions.MaxPlayers" + roomOptions.MaxPlayers);
-
-            //foreach (var player in PhotonNetwork.PlayerList) {
-            //    Debug.LogError("玩家：" + player);
-            //}
             return PhotonNetwork.PlayerList.Length == roomOptions.MaxPlayers;
         }
+
+
     }
 }

@@ -12,16 +12,6 @@ public class GameOverPanel : MonoBehaviourPun
     public AudioSource winSound;
     public AudioSource loseSound;
 
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-
-    }
-
     public void GameOver(PlayerType winner)
     {
         Debug.Log("接收到Canvas的消息");
