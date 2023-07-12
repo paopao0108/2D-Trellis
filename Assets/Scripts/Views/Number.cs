@@ -8,11 +8,11 @@ public class Number : MonoBehaviour
 {
     private TMP_Text numText;
 
-    public int num = 5; // Ä¬ÈÏÊıÁ¿
+    public int num = 5; // é»˜è®¤æ•°é‡
     private void Awake()
     {
         numText = GetComponent<TMP_Text>();
-        Debug.Log("ÊıÁ¿ÎÄ±¾£º" + numText.text);
+        Debug.Log("æ•°é‡æ–‡æœ¬ï¼š" + numText.text);
     }
     void Start()
     {

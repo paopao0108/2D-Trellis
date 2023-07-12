@@ -27,18 +27,18 @@ public class GameController : MonoBehaviourPun
     [PunRPC]
     public void SendGameOver(PlayerType winner)
     {
-        //Debug.Log("½ÓÊÜµ½RingµÄÏûÏ¢");
+        //Debug.Log("æ¥å—åˆ°Ringçš„æ¶ˆæ¯");
         //System.Threading.Thread.Sleep(500);
-        transform.Find("GameOverPanel").gameObject.SetActive(true); // ÏÔÊ¾gameoverÒ³Ãæ
+        transform.Find("GameOverPanel").gameObject.SetActive(true); // æ˜¾ç¤ºgameoveré¡µé¢
         BroadcastMessage("GameOver", winner);
-        PauseSound(bgSound); // ÔİÍ£±³¾°ÒôÀÖ
+        PauseSound(bgSound); // æš‚åœèƒŒæ™¯éŸ³ä¹
     }
 
     public void GameAgain()
     {
-        //Debug.Log("½ÓÊÜµ½ Again µÄÏûÏ¢");
-        transform.Find("GameOverPanel").gameObject.SetActive(false); // Òş²ØgameoverÒ³Ãæ
-        UnPauseSound(bgSound); // ²¥·Å±³¾°ÒôÀÖ
+        //Debug.Log("æ¥å—åˆ° Again çš„æ¶ˆæ¯");
+        transform.Find("GameOverPanel").gameObject.SetActive(false); // éšè—gameoveré¡µé¢
+        UnPauseSound(bgSound); // æ’­æ”¾èƒŒæ™¯éŸ³ä¹
     }
 
     public void PlaySound(AudioSource audio)

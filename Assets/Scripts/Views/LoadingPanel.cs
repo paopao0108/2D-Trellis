@@ -7,6 +7,6 @@ public class LoadingPanel : MonoBehaviour
 
     public void WaitforPlayerEnter()
     {
-        Debug.Log("接受到enter消息");
+        Debug.Log("鎺ュ彈鍒癳nter娑堟伅");
     }
 }

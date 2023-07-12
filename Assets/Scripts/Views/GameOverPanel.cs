@@ -7,27 +7,27 @@ using Utils;
 
 public class GameOverPanel : MonoBehaviourPun
 {
-    private PlayerType curClient; // µ±Ç°¿Í»§¶Ë
+    private PlayerType curClient; // å½“å‰å®¢æˆ·ç«¯
 
     public AudioSource winSound;
     public AudioSource loseSound;
 
     public void GameOver(PlayerType winner)
     {
-        Debug.Log("½ÓÊÕµ½CanvasµÄÏûÏ¢");
-        // 1. ÏÈ»ñÈ¡µ±Ç°µÄ¿Í»§¶Ë
+        Debug.Log("æ¥æ”¶åˆ°Canvasçš„æ¶ˆæ¯");
+        // 1. å…ˆè·å–å½“å‰çš„å®¢æˆ·ç«¯
         curClient = PhotonNetwork.IsMasterClient ? PlayerType.MasterPlayer : PlayerType.ClientPlayer;
 
-        // 2. ÅĞ¶Ïµ±Ç°¿Í»§¶ËÓëwinnerÏàÍ¬
+        // 2. åˆ¤æ–­å½“å‰å®¢æˆ·ç«¯ä¸winnerç›¸åŒ
         if (winner == curClient) 
         {
             ShowWin();
-            GameController.Instance.PlaySound(winSound); // ²¥·Å³É¹¦ÒôĞ§
+            GameController.Instance.PlaySound(winSound); // æ’­æ”¾æˆåŠŸéŸ³æ•ˆ
         }
         else
         {
             ShowLose();
-            GameController.Instance.PlaySound(loseSound); // ²¥·ÅÊ§°ÜÒôĞ§
+            GameController.Instance.PlaySound(loseSound); // æ’­æ”¾å¤±è´¥éŸ³æ•ˆ
         }
 
     }
@@ -46,7 +46,7 @@ public class GameOverPanel : MonoBehaviourPun
 
     public void OnExitButton()
     {
-        Debug.Log("ÍË³öÓÎÏ·£¡");
+        Debug.Log("é€€å‡ºæ¸¸æˆï¼");
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
@@ -55,16 +55,16 @@ public class GameOverPanel : MonoBehaviourPun
     }
 
     
-    public void OnAgainButton() // ÔİÊ±ÊµÏÖÒ»¶Ë¿Í»§¶Ëµã»÷ÔÙÀ´Ò»´Î£¬¶à¶ËÍ¬Ê±¿ªÊ¼
+    public void OnAgainButton() // æš‚æ—¶å®ç°ä¸€ç«¯å®¢æˆ·ç«¯ç‚¹å‡»å†æ¥ä¸€æ¬¡ï¼Œå¤šç«¯åŒæ—¶å¼€å§‹
     {
-        Debug.Log("ÔÙÀ´Ò»´Î"); // Íæ¼ÒÖØĞÂ½øÈë·¿¼ä£¬ÓÎÏ·ÖØĞÂ¿ªÊ¼
-        photonView.RPC("ResetGame", RpcTarget.AllBuffered); // ¶à¶ËÍ¬Ê±µ÷ÓÃResetGame
+        Debug.Log("å†æ¥ä¸€æ¬¡"); // ç©å®¶é‡æ–°è¿›å…¥æˆ¿é—´ï¼Œæ¸¸æˆé‡æ–°å¼€å§‹
+        photonView.RPC("ResetGame", RpcTarget.AllBuffered); // å¤šç«¯åŒæ—¶è°ƒç”¨ResetGame
     }
 
     [PunRPC]
     public void ResetGame()
     {
-        // 1. Çå¿ÕgridsÊı¾İ
+        // 1. æ¸…ç©ºgridsæ•°æ®
         for (int i = 0; i < GridPanel.row; i++)
         {
             for (int j = 0; j < GridPanel.col; j++)
@@ -72,20 +72,20 @@ public class GameOverPanel : MonoBehaviourPun
                 GridPanel.grids[j][i].clear();
             }
         }
-        // 2. ÖØÖÃÔ²»·ÊıÁ¿
+        // 2. é‡ç½®åœ†ç¯æ•°é‡
         Number[] nums = FindObjectsOfType<Number>();
         foreach (var num in nums)
         {
             num.ResetNum();
         }
-        // 3. ÖØÖÃÔ²»·
+        // 3. é‡ç½®åœ†ç¯
         Ring[] rings = FindObjectsOfType<Ring>();
         foreach (var ring in rings)
         {
             ring.ResetRing();
         }
 
-        // 3. ´¦ÀíÒ³ÃæÌø×ª
+        // 3. å¤„ç†é¡µé¢è·³è½¬
         SendMessageUpwards("GameAgain");
     }
 }

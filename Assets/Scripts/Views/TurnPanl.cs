@@ -11,7 +11,7 @@ public class TurnPanl : MonoBehaviour
     {
         _yourTurnText = GameObject.Find("YourTurnText");
         _otherTurnText = GameObject.Find("OtherTurnText");
-        //Debug.Log("turntext£º" + _yourTurnText + _otherTurnText);
+        //Debug.Log("turntextï¼š" + _yourTurnText + _otherTurnText);
     }
 
     public static void ShowTurn()
